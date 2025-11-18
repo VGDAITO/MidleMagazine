@@ -28,6 +28,10 @@ void AddStorageItem();
 void RemoveStorageItem();
 void ChangePrice();
 
+void AddNewItem();
+void ChangeStorage();
+void ChangeName();
+
 template<typename ArrType>
 void FillArray(ArrType* dynamicArray, ArrType* staticArray, size_t arraySize);
 
@@ -176,7 +180,7 @@ void ShowSuperAdminMenu()
 		}
 		else if (choose == "6")
 		{
-
+			ChangeStorage();
 		}
 		else if (choose == "7")
 		{
@@ -282,6 +286,15 @@ void ShowStorage(int mode)
 		for (size_t i = 0; i < storageSize; i++)
 		{
 			std::cout << idArr[i] << "\t" << std::left << std::setw(25) << nameArr[i] << "\t" << priceArr[i] << "\t\t\n";
+		}
+	}
+	else if (mode == 3)
+	{
+		std::cout << "ID\t" << std::left << std::setw(25) << "Название товара\t\t\n";
+
+		for (size_t i = 0; i < storageSize; i++)
+		{
+			std::cout << idArr[i] << "\t" << std::left << std::setw(25) << nameArr[i]  << "\t\t\n";
 		}
 	}
 }
@@ -460,6 +473,259 @@ void ChangePrice()
 		}
 
 	}
+}
+
+void AddNewItem()
+{
+	std::string newName, newPrice, newCount, choose;
+	double price = 0.0;
+	unsigned int count = 0;
+	bool exit;
+
+	while (true)
+	{
+		exit = true;
+		while (true)
+		{
+			system("cls");
+			std::cout << "\tДобавление нового товара:\n\nВведите \"exit\" для прекращение операции \n\n ";
+			std::cout << "Введите название нового товара: ";
+			Getline(newName);
+			if (newName == "exit")
+			{
+				std::cout << "Операция добавления товара прервана! \n";
+				Sleep(1500);
+				exit = false;
+				break;
+			}
+			
+			if (newName.size() <= 0 || newName.size() >= 60)
+			{
+				std::cout << "Ошибка имени. Максимальная длина 60 символов\n";
+				
+			}
+			else
+			{
+				break;
+			}
+		}
+
+		while (exit)
+		{
+			system("cls");
+			std::cout << "\tДобавление нового товара:\n\nВведите \"exit\" для прекращение операции \n\n ";
+			std::cout << "Введите кол-во товара: ";
+			Getline(newCount);
+			if (newCount == "exit")
+			{
+				std::cout << "Операция добавления товара прервана! \n";
+				Sleep(1500);
+				exit = false;
+				break;
+			}
+			if (IsNumber(newCount))
+			{
+				count = std::stoi(newCount);
+				if (count > 777 || count < 0)
+				{
+					std::cout << "Ошибка максимального размера товара. Не более 777 ед.\n";
+					Sleep(1500);
+
+				}
+				else
+				{
+					break;
+				}
+			}
+		}
+		
+		while (exit)
+		{
+			system("cls");
+			std::cout << "\tДобавление нового товара:\n\nВведите \"exit\" для прекращение операции \n\n ";
+			std::cout << "Введите цену нового товара: ";
+			Getline(newPrice);
+			if (newPrice == "exit")
+			{
+				std::cout << "Операция добавления товара прервана! \n";
+				Sleep(1500);
+				exit = false;
+				break;
+			}
+			if (IsNumber(newPrice))
+			{
+				price = std::stod(newPrice);
+				if (price > 7777777 || price < 0)
+				{
+					std::cout << "Ошибка максимальная цена товара. Не более 7777777 руб.\n";
+					Sleep(1500);
+
+				}
+				else
+				{
+					break;
+				}
+			}
+		}
+		
+		while (exit)
+		{
+			system("cls");
+			std::cout << "Новый товар: " << newName << "\n";
+			std::cout << "Кол-во товар: " << count << "\n";
+			std::cout << "Цена товар: " << price << "\n";
+			std::cout << "Подтвердить?\n1 - Да\n2 - Нет\nВвод: ";
+			Getline(choose);
+			if (choose == "1")
+			{
+				storageSize++;
+				unsigned int* idArrTemp = new unsigned int[storageSize];
+				std::string* nameArrTemp = new std::string[storageSize];
+				unsigned int* countArrTemp = new unsigned int[storageSize];
+				double* priceArrTemp = new double[storageSize];
+
+				FillArray(idArrTemp, idArr, storageSize - 1);
+				FillArray(nameArrTemp, nameArr, storageSize - 1);
+				FillArray(countArrTemp, countArr, storageSize - 1);
+				FillArray(priceArrTemp, priceArr, storageSize - 1);
+
+				idArrTemp[storageSize-1] = storageSize;
+				nameArrTemp[storageSize - 1]= newName;
+				countArrTemp[storageSize - 1] = count;
+				priceArrTemp[storageSize - 1] = price;
+
+				std::swap(idArr, idArrTemp);
+				std::swap(nameArr, nameArrTemp);
+				std::swap(countArr, countArrTemp);
+				std::swap(priceArr, priceArrTemp);
+
+				delete[] idArrTemp, nameArrTemp, countArrTemp, priceArrTemp;
+				std::cout << "Идет подготовка...";
+				Sleep(2000);
+				std::cout << "Товар успешно добавлен\n\n";
+				Sleep(1500);
+				break;
+			}
+			else if (choose == "2")
+			{
+				std::cout << "Отмена\n\n";
+				Sleep(1500);
+				break;
+			}
+			else
+			{
+				Err();
+			}
+			
+
+		}
+
+		if (exit == false)
+		{
+			break;
+		}
+	}
+}
+
+void ChangeStorage()
+{
+	std::string choose;
+	while (true)
+	{
+		system("cls");
+		std::cout << "1 - Добавить новый товар\n";
+		std::cout << "2 - Изменить название товара\n";
+		std::cout << "3 - Удалить товар\n";
+		std::cout << "0 - Выход из редактора\n";
+		std::cout << "Ввод: ";
+		Getline(choose);
+
+		if (choose == "1")
+		{
+			AddNewItem();
+		}
+		else if (choose == "2")
+		{
+			
+		}
+		else if (choose == "3")
+		{
+			
+		}
+	
+		else if (choose == "0")
+		{
+			system("cls");
+			break;
+		}
+		else
+		{
+			Err();
+		}
+
+	}
+}
+
+void ChangeName()
+{
+	std::string chooseId, newName, choose;
+	unsigned int id = 0;
+
+	while (true)
+	{
+		system("cls");
+		ShowStorage(3);
+		std::cout << "\nВведите ID товара или \"exit\" для выхода: ";
+		Getline(chooseId);
+		if (chooseId == "exit")
+		{
+			std::cout << "Отмена операции изменения цены\n";
+			Sleep(1500);
+			break;
+		}
+		
+		std::cout << "Введите новое название товара: ";
+		Getline(newName);
+
+		if (newName.size() <= 0 || newName.size() >= 60)
+		{
+			std::cout << "Ошибка имени. Максимальная длина 60 символов\n";
+			Sleep(1500);
+
+		}
+		else if (IsNumber(chooseId))
+		{
+			id = std::stoi(chooseId) - 1;
+			if (id < 0 || id >> storageSize - 1)
+			{
+				std::cout << "Ошибка ID! \n";
+				Sleep(1500);
+			}
+			else
+			{
+				std::cout << nameArr[id] << "-->" << newName << "\n\n";
+				std::cout << "Подтвердить:\n1 - Да\n2 - Нет\nВвод: ";
+				Getline(choose);
+				if (choose == "1")
+				{
+					nameArr[id] = newName;
+					std::cout << "Смена названия завершена\n";
+					Sleep(1500);
+					break;
+				}
+				else if (choose == "2")
+				{
+					std::cout << "Отмена операции\n";
+				}
+				else
+				{
+					Err();
+				}
+			}
+		}
+
+	}
+
 }
 
 template<typename ArrType>
