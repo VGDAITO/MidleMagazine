@@ -15,6 +15,7 @@ std::string currentStatus;
 
 void ChangeUsers();
 void ShowUsers();
+void AddNewUsers();
 
 
 //-----------------------------------------------------------
@@ -337,9 +338,13 @@ inline void Err(int time)
 
 void ChangeUsers()
 {
-	if (SetLoginSymbols == false)
+	if (isLoginSetCreated == false)
 	{
 		SetLoginSymbols();
+	}
+	if (isPassSetCreated == false)
+	{
+		SetPassSymbols();
 	}
 
 	std::string choose;
@@ -351,12 +356,11 @@ void ChangeUsers()
 		std::cout << "3 - Изменить пароль пользователя\n";
 		std::cout << "4 - Удалить пользователя\n";
 		std::cout << "0 - Выход из редактора\n";
-		std::cout << "Ввод: ";
+		std::cout << "Ввод - ";
 		Getline(choose);
-
 		if (choose == "1")
 		{
-			
+			AddNewUsers();
 		}
 		else if (choose == "2" && userSize > 1)
 		{
@@ -364,14 +368,12 @@ void ChangeUsers()
 		}
 		else if (choose == "3" && userSize > 1)
 		{
-			
-		}
 
+		}
 		else if (choose == "4" && userSize > 1)
 		{
 
 		}
-
 		else if (choose == "0")
 		{
 			system("cls");
@@ -381,26 +383,113 @@ void ChangeUsers()
 		{
 			if (userSize < 2)
 			{
-				std::cout << "Пользователи отсутсвуют\n";
+				std::cout << "Пользователи отсутствуют!\n";
 			}
 			Err();
 		}
-
 	}
-}
 
+}
 void ShowUsers()
 {
 	system("cls");
 
-	std::cout << "№\t" << std::left << std::setw(12) << "Логин\t\t" << "   Пароль\t\t\t" << "Роль\n";
-
-
+	std::cout << "№\t" << std::left << std::setw(12) << "Логин\t\t " << "   Пароль\t\t\t" << "Роль\n";
 	for (size_t i = 1; i < userSize; i++)
 	{
-		std::cout << i << "\t" << std::left << std::setw(9) << loginArr[i] << "\t\t" << passArr[i] << "\t\t\t" << statusArr[i] << "\n";
+		std::cout << i << "\t" << std::left << std::setw(9) << loginArr[i] << "\t\t" << passArr[i] << "\t\t\t"
+			<< statusArr[i] << "\n";
 	}
 	system("pause");
+
+
+}
+void AddNewUsers()
+{
+	std::string newLogin, newPass, newRole, choose;
+	bool exit = true;
+	while (true)
+	{
+		while (true)
+		{
+			system("cls");
+			std::cout << "Введите логин нового пользователяили exit для выхода";
+			Getline(newLogin);
+			if (newLogin == "exit")
+			{
+				std::cout << "Отмена добавление нового пользователя";
+				exit = false;
+				Sleep(1500);
+				break;
+			}
+			if (CheckLogin(newLogin))
+			{
+				break;
+			}
+			else
+			{
+				std::cout << "Допустимые сиволы a-z, A-Z, 0-9\n\n";
+				Sleep(1500);
+			}
+		}
+
+		while (exit)
+		{
+			system("cls");
+			std::cout << "Введите пароль нового пользователяили exit для выхода";
+			Getline(newPass);
+			if (newPass == "exit")
+			{
+				std::cout << "Отмена добавление нового пользователя";
+				exit = false;
+				Sleep(1500);
+				break;
+			}
+			if (CheckLogin(newPass))
+			{
+				break;
+			}
+			else
+			{
+				std::cout << "Допустимые сиволы a-z, A-Z, 0-9 + спец символы\n\n";
+				Sleep(1500);
+			}
+		}
+
+		while (exit)
+		{
+			system("cls");
+			std::cout << "Выберите роль нового пользователяили exit для выхода";
+			std::cout << "1 - Админ\n 2 - Сотрудник\nВвод: ";
+			Getline(choose);
+			if (choose == "exit")
+			{
+				std::cout << "Отмена добавление нового пользователя";
+				exit = false;
+				Sleep(1500);
+				break;
+			}
+			if (choose == "1")
+			{
+				newRole = userStatus[1];
+				break;
+			}
+			else if (choose == "2")
+			{
+				newRole = userStatus[2];
+				break;
+			}
+			else
+			{
+				Err();
+			}
+		}
+
+		while (exit)
+		{
+			//===========================
+		}
+	}
 }
 
 void CreateStorage()
