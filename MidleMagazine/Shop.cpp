@@ -208,6 +208,11 @@ void Selling()
 						Err();
 					}
 				}
+				delete[]idArrCheck;
+				delete[]nameArrCheck;
+				delete[]countArrCheck;
+				delete[]priceArrCheck;
+				delete[]totalPriceArrCheck;
 			}
 			else if (choose == "2")
 			{
