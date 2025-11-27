@@ -152,7 +152,7 @@ void Selling()
 						Sleep(1500);
 						if (rand() % 10 <= 2)
 						{
-							for (size_t i = 0; i < 10; i++)
+							for (size_t i = 0; i < 5; i++)
 							{
 								std::cout << i + 1 << "\t";
 								Beep(500, 400);
@@ -163,13 +163,18 @@ void Selling()
 						}
 						else
 						{
-							for (size_t i = 0; i < 10; i++)
+							for (size_t i = 0; i < 5; i++)
 							{
 								std::cout << i + 1 << "\t";
 								Beep(500, 400);
 								Sleep(1000);
 							}
-							std::cout << "\nОплата прошла успешно\n\n";
+							std::cout << "\nОплата прошла успешно. Спасибо за покупку!\n";
+							Sleep(2000);
+							bankIncome += totalSum;
+							bonusArr[currentId] += totalSum;
+							system("cls");
+							break;
 						}
 					}
 					else if (choose == "Мопсик" || choose == "мопсик")
@@ -196,7 +201,7 @@ void Selling()
 
 							}
 							std::cout << "\nОплата прошла успешно. Спасибо за покупку!\n";
-							Sleep(1500);
+							Sleep(2000);
 							bankIncome += totalSum;
 							bonusArr[currentId] += totalSum;
 							system("cls");
