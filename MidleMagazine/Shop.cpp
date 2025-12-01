@@ -74,6 +74,7 @@ void PrintCheck(double& totalSum);
 void StorageReturner();
 
 double DiscountFromAmount(double& totalSum);
+double Promo(double& totalSum, std::string& promo, int &attempts);
 
 
 // ---------------------------Служебные----------------------------
@@ -118,6 +119,7 @@ void Selling()
 	int index = -1;
 	double money = 0.0, totalSum = 0.0;
 	bool isFirst = false;
+	int attempts = 0;
 
 	while (true)
 	{
@@ -133,6 +135,11 @@ void Selling()
 				break;
 			}
 			
+			double beforeAmount = totalSum;
+			totalSum = DiscountFromAmount(totalSum);
+			std::cout << "\nСумма до скидки: " << beforeAmount << "\nСумма после скидок: " << totalSum << "\n";
+			Sleep(1500);
+
 			PrintCheck(totalSum);
 
 			
@@ -235,6 +242,20 @@ void Selling()
 				Sleep(1500);
 				system("cls");
 				return;
+			}
+			else if (choose == "4" && attempts < 1)
+			{
+				
+				std::string promo;
+				std::cout << "\nВведите промокод: ";
+				Getline(promo);
+				
+				double beforePromo = totalSum;
+				totalSum = Promo(totalSum, promo,attempts);
+				std::cout << "\nСумма до скидки: " << beforePromo << "\nСумма после скидок: " << totalSum << "\n";
+				Sleep(1500);
+				continue;
+
 			}
 			
 			else
@@ -378,6 +399,30 @@ double DiscountFromAmount(double& totalSum)
 		return totalSum * 0.95;
 	}
 	return totalSum;
+}
+
+double Promo(double& totalSum, std::string& promo, int &attempts)
+{
+	
+
+	if (promo == "14")
+	{
+		attempts++;
+		return totalSum * 0.80;
+	}
+	if (promo == "ЧИУЛАВА")
+	{
+		attempts++;
+		return totalSum * 0.85;
+	}
+	if (promo == "ИМБА")
+	{
+		attempts++;
+		return totalSum * 0.90;
+	}
+	
+	return totalSum;
+
 }
 
 void Start()
