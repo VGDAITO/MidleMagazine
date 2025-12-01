@@ -73,6 +73,9 @@ void CheckArrAppend();
 void PrintCheck(double& totalSum);
 void StorageReturner();
 
+double DiscountFromAmount(double& totalSum);
+
+
 // ---------------------------Служебные----------------------------
 std::unordered_set<char> passSymbols;
 std::unordered_set<char> loginSymbols;
@@ -131,8 +134,10 @@ void Selling()
 			}
 			
 			PrintCheck(totalSum);
+
 			
-			std::cout << "\nПодтвердить покупку?\n1 - Да\n2 - Добавить еще товар\n3 - Отмена\nВвод: ";
+			
+			std::cout << "\nПодтвердить покупку?\n1 - Да\n2 - Добавить еще товар\n3 - Отмена\n4 - Ввести промокод\nВвод: ";
 			Getline(choose);
 			if (choose == "1")
 			{
@@ -352,6 +357,27 @@ void StorageReturner()
 	delete[]countArrCheck;
 	delete[]priceArrCheck;
 	delete[]totalPriceArrCheck;
+}
+
+double DiscountFromAmount(double& totalSum)
+{
+	if (totalSum >= 700000)
+	{
+		return totalSum * 0.70;
+	}
+	if (totalSum >= 350000)
+	{
+		return totalSum * 0.80;
+	}
+	if (totalSum >= 200000)
+	{
+		return totalSum * 0.90;
+	}
+	if (totalSum >= 70000)
+	{
+		return totalSum * 0.95;
+	}
+	return totalSum;
 }
 
 void Start()
