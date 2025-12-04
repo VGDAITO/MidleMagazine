@@ -85,6 +85,7 @@ bool isPassSetCreated = false;
 
 void Start();
 bool Login();
+bool Logout();
 void SetLoginSymbols();
 void SetPassSymbols();
 bool CheckLogin(const std::string &str);
@@ -93,6 +94,7 @@ void ShowSuperAdminMenu();
 bool IsNumber(const std::string& str);
 inline void Getline(std::string& str);
 inline void Err(int time = 1500);
+void ShowIncome();
 
 
 //------------------------------------------------------------
@@ -103,10 +105,17 @@ int main()
 	srand(time(NULL));
 
 	Start();
-	delete[]loginArr, passArr, statusArr, bonusArr, userIdArr;
+	delete[]loginArr;
+	delete[] passArr;
+	delete[] statusArr;
+	delete[] bonusArr;
+	delete[] userIdArr;
 	if (isStorageCreated)
 	{
-		delete[]idArr, nameArr, countArr, priceArr;
+		delete[]idArr;
+		delete[] nameArr;
+		delete[] countArr;
+		delete[] priceArr;
 	}
 
 	return 0;
@@ -155,6 +164,39 @@ void Selling()
 					Getline(choose);
 					if (choose == "1")
 					{
+						std::cout << "К оплате: " << totalSum << "\n\n";
+						std::cout << "Введите кол-во наличных: ";
+						Getline(chooseMoney);
+						if (IsNumber(chooseMoney))
+						{
+							money = std::stod(chooseMoney);
+							if (money < totalSum)
+							{
+								std::cout << "Недостаточно средств!\n";
+								Sleep(1500);
+								continue;
+							}
+							else if (money - totalSum > cash)
+							{
+								std::cout << "Нет возможности дать сдачи\n";
+								Sleep(1500);
+								continue;
+							}
+							else
+							{
+								std::cout << "Ваши: " << money << "\n\n";
+								Sleep(400);
+								std::cout << "Оплата прошла успешно. Сдача: " << money - totalSum << " рублей\n";
+								Sleep(2000);
+								cash += totalSum;
+								cashIncome += totalSum;
+								bonusArr[currentId] += totalSum;
+
+								system("cls");
+								break;
+							}
+						}
+
 
 					}
 
@@ -191,34 +233,11 @@ void Selling()
 					}
 					else if (choose == "Мопсик" || choose == "мопсик")
 					{
-						std::cout << "Приложите карту \n\n";
+						std::cout << "Мопсик оплатил вам счет\n\n";
 						Sleep(1500);
-						if (rand() % 10 <= 2)
-						{
-							for (size_t i = 0; i < 5; i++)
-							{
-								std::cout << i + 1 << "\t";
-								Beep(500, 400);
-								Sleep(1000);
-							}
-							std::cout << "\nОплата прошла успешно. Спасибо за покупку!\n\n";
-						}
-						else
-						{
-							for (size_t i = 0; i < 5; i++)
-							{
-								std::cout << i + 1 << "  ";
-								Beep(500, 400);
-								Sleep(1500);
+						system("cls");
+						break;
 
-							}
-							std::cout << "\nОплата прошла успешно. Спасибо за покупку!\n";
-							Sleep(2000);
-							bankIncome += totalSum;
-							bonusArr[currentId] += totalSum;
-							system("cls");
-							break;
-						}
 					}
 					else
 					{
@@ -230,6 +249,14 @@ void Selling()
 				delete[]countArrCheck;
 				delete[]priceArrCheck;
 				delete[]totalPriceArrCheck;
+
+				idArrCheck = nullptr;
+				nameArrCheck = nullptr;
+				countArrCheck = nullptr;
+				priceArrCheck = nullptr;
+				totalPriceArrCheck = nullptr;
+
+				checkSize = 0;
 			}
 			else if (choose == "2")
 			{
@@ -378,6 +405,14 @@ void StorageReturner()
 	delete[]countArrCheck;
 	delete[]priceArrCheck;
 	delete[]totalPriceArrCheck;
+
+	idArrCheck = nullptr;
+	nameArrCheck = nullptr;
+	countArrCheck = nullptr;
+	priceArrCheck = nullptr;
+	totalPriceArrCheck = nullptr;
+
+	checkSize = 0;
 }
 
 double DiscountFromAmount(double& totalSum)
@@ -517,6 +552,31 @@ bool Login()
 			}
 		}
 		Err();
+	}
+}
+bool Logout()
+{
+	std::string choose;
+	system("cls");
+
+	while (true)
+	{
+		std::cout << "Для подтверждения выхода из пользователя введите свой пароль или \"exit\" для возврата в меню: ";
+		Getline(choose);
+		if (choose == "exit")
+		{
+			system("cls");
+			return false;
+		}
+		else if (choose == passArr[currentId - 1] || choose == passArr[0])
+		{
+			system("cls");
+			return true;
+		}
+		else
+		{
+			Err();
+		}
 	}
 }
 void SetLoginSymbols()
@@ -677,11 +737,14 @@ void ShowSuperAdminMenu()
 		}
 		else if (choose == "8")
 		{
-
+			ShowIncome;
 		}
 		else if (choose == "0")
 		{
-
+			if (Logout())
+			{
+				break;
+			}
 		}
 		else
 		{
@@ -723,6 +786,20 @@ inline void Err(int time)
 	std::cout << "Некорректный ввод\n\n\n";
 	Sleep(time);
 	system("cls");
+}
+
+void ShowIncome()
+{
+	system("cls");
+	std::cout << "Текущая прибыль за смену\n\n";
+	std::cout << "Наилчный расчет: " << cashIncome << "\n\n";
+	std::cout << "Безналичный расчет: " << bankIncome << "\n\n";
+	std::cout << "Итого: " << bankIncome + cashIncome << "\n\n";
+	std::cout << "Сумма ваших продаж: " << bonusArr[currentId] << "\n\n";
+	
+	system("pause");
+	system("cls");
+	
 }
 
 void ChangeUsers()
@@ -929,7 +1006,11 @@ void AddNewUsers()
 				std::swap(bonusArr, bonusArrTemp);
 				std::swap(userIdArr, userIdArrTemp);
 
-				delete[]loginArrTemp, passArrTemp, statusArrTemp, userIdArrTemp, bonusArrTemp;
+				delete[]loginArrTemp;
+				delete[] passArrTemp;
+				delete[] statusArrTemp;
+				delete[] userIdArrTemp;
+				delete[] bonusArrTemp;
 
 				std::cout << "Идет подготовка...\n";
 				Sleep(2000);
@@ -1126,7 +1207,11 @@ void DeleteUser()
 					std::swap(bonusArr, bonusArrTemp);
 					std::swap(userIdArr, userIdArrTemp);
 
-					delete[]loginArrTemp, passArrTemp, statusArrTemp, userIdArrTemp, bonusArrTemp;
+					delete[]loginArrTemp;
+					delete[]passArrTemp;
+					delete[]statusArrTemp;
+					delete[]userIdArrTemp;
+					delete[]bonusArrTemp;
 
 					std::cout << "Идет подготовка...\n";
 					Sleep(2000);
@@ -1168,7 +1253,10 @@ void CreateStorage()
 
 	if (isStorageCreated)
 	{
-		delete[] idArr, nameArr, countArr, priceArr;
+		delete[] idArr;
+		delete[]nameArr;
+		delete[]countArr;
+		delete[]priceArr;
 	}
 
 	storageSize = staticSize;
@@ -1526,7 +1614,10 @@ void AddNewItem()
 				std::swap(countArr, countArrTemp);
 				std::swap(priceArr, priceArrTemp);
 
-				delete[] idArrTemp, nameArrTemp, countArrTemp, priceArrTemp;
+				delete[] idArrTemp;
+				delete[] nameArrTemp;
+				delete[] countArrTemp;
+				delete[] priceArrTemp;
 				std::cout << "Идет подготовка...";
 				Sleep(2000);
 				std::cout << "Товар успешно добавлен\n\n";
@@ -1714,7 +1805,10 @@ void DeleteItem()
 					std::swap(countArr, countArrTemp);
 					std::swap(priceArr, priceArrTemp);
 
-					delete[] idArrTemp, nameArrTemp, countArrTemp, priceArrTemp;
+					delete[] idArrTemp;
+					delete[] nameArrTemp;
+					delete[] countArrTemp;
+					delete[] priceArrTemp;
 					std::cout << "Идет подготовка...";
 					Sleep(2000);
 					std::cout << "Товар успешно удален\n\n";
