@@ -536,7 +536,6 @@ void Start()
 				std::cout << "Итоговая прибыль за смену: " << cashIncome + bankIncome;
 				std::cout << "\n\n\n\t\tЗавершения работы программы\n\n\n";
 				Sleep(2000);
-				break;
 			}
 			else if (choose == "exit")
 			{
@@ -546,7 +545,7 @@ void Start()
 			{
 				Err();
 			}
-		
+			std::cout << "Завершение работы программы\n\n\n";
 		}
 
 	}
@@ -770,7 +769,7 @@ void ShowSuperAdminMenu()
 		}
 		else if (choose == "8")
 		{
-			ShowIncome();
+			ShowIncome;
 		}
 		else if (choose == "0")
 		{
@@ -833,7 +832,7 @@ void ShowAdminMenu()
 		}
 		else if (choose == "7")
 		{
-			ShowIncome();
+			ShowIncome;
 		}
 		else if (choose == "0")
 		{
@@ -876,7 +875,7 @@ void ShowUserMenu()
 		
 		else if (choose == "3")
 		{
-			ShowIncome();
+			ShowIncome;
 		}
 		else if (choose == "0")
 		{
