@@ -92,6 +92,8 @@ void SetPassSymbols();
 bool CheckLogin(const std::string &str);
 bool CheckPass(const std::string& str);
 void ShowSuperAdminMenu();
+void ShowAdminMenu();
+void ShowUserMenu();
 bool IsNumber(const std::string& str);
 inline void Getline(std::string& str);
 inline void Err(int time = 1500);
@@ -466,60 +468,89 @@ void Start()
 	
 	std::string choose;
 
-	if (Login())
+	while (true)
 	{
-		if (currentStatus == userStatus[0])
+
+		if (Login())
 		{
-			while (true)
+			if (currentStatus == userStatus[0])
 			{
-				std::cout << "Выберетие склад\n1 - Готовый склад\n2 - Создать новый\nВвод: ";
-				Getline(choose);
-				if (choose == "1")
+				while (true)
 				{
-					
-					if (isStorageCreated == false)
+					std::cout << "Выберетие склад\n1 - Готовый склад\n2 - Создать новый\nВвод: ";
+					Getline(choose);
+					if (choose == "1")
 					{
-						CreateStorage();
+
+						if (isStorageCreated == false)
+						{
+							CreateStorage();
+						}
+						system("cls");
+						ShowSuperAdminMenu();
+						break;
 					}
-					system("cls");
-					ShowSuperAdminMenu();
-				}
-				else if (choose == "2")
-				{
-					if (isStorageCreated == false)
+					else if (choose == "2")
 					{
-						ZeroCreateStorage();
+						if (isStorageCreated == false)
+						{
+							ZeroCreateStorage();
+						}
+						system("cls");
+						ShowSuperAdminMenu();
 					}
-					system("cls");
-					ShowSuperAdminMenu();
+					else
+					{
+						Err();
+					}
 				}
-				else
-				{
-					Err();
-				}
-			}
-			CreateStorage();
-		}
-		else if (currentStatus == userStatus[1])
-		{
-			if (isStorageCreated == false)
-			{
 				CreateStorage();
 			}
-		}
-		else if (currentStatus == userStatus[2])
-		{
-			if (isStorageCreated == false)
+			else if (currentStatus == userStatus[1])
 			{
-				CreateStorage();
+				if (isStorageCreated == false)
+				{
+					CreateStorage();
+				}
+				system("cls");
+				ShowAdminMenu();
+			}
+			else if (currentStatus == userStatus[2])
+			{
+				if (isStorageCreated == false)
+				{
+					CreateStorage();
+				}
+				system("cls");
+				ShowUserMenu();
 			}
 		}
+		else
+		{
+			system("cls");
+			std::cout << "Введите пароль супер администратора для завершения смены или \"exit\" для отмены: ";
+			Getline(choose);
+			if (choose == passArr[0])
+			{
+				system("cls");
+				std::cout << "Итоговая прибыль за смену: " << cashIncome + bankIncome;
+				std::cout << "\n\n\n\t\tЗавершения работы программы\n\n\n";
+				Sleep(2000);
+			}
+			else if (choose == "exit")
+			{
+				continue;
+			}
+			else
+			{
+				Err();
+			}
+			std::cout << "Завершение работы программы\n\n\n";
+		}
+
 	}
-	else
-	{
-		system("cls");
-		std::cout << "Завершение работы программы\n\n\n";
-	}
+
+	
 
 }
 bool Login()
@@ -737,6 +768,112 @@ void ShowSuperAdminMenu()
 			ChangeUsers();
 		}
 		else if (choose == "8")
+		{
+			ShowIncome;
+		}
+		else if (choose == "0")
+		{
+			if (Logout())
+			{
+				break;
+			}
+		}
+		else
+		{
+			if (storageSize < 1)
+			{
+				std::cout << "Склад пустой\n";
+			}
+			Err();
+		}
+
+	}
+}
+void ShowAdminMenu()
+{
+	std::string choose;
+	while (true)
+	{
+		std::cout << "1 - Начать продажу\n";
+		std::cout << "2 - Показать склад\n";
+		std::cout << "3 - Пополнить склад\n";
+		std::cout << "4 - Списать товар\n";
+		std::cout << "5 - Редактировать склад\n";
+		std::cout << "6 - Редактировать персонал\n";
+		std::cout << "7 - Отчет о прибыли\n";
+		std::cout << "0 - Закрыть смену\n";
+		std::cout << "Ввод: ";
+		Getline(choose);
+
+		if (choose == "1" && storageSize > 0)
+		{
+			Selling();
+		}
+		else if (choose == "2" && storageSize > 0)
+		{
+			ShowStorage();
+		}
+		else if (choose == "3" && storageSize > 0)
+		{
+			AddStorageItem();
+		}
+		else if (choose == "4" && storageSize > 0)
+		{
+			RemoveStorageItem();
+		}
+		
+		else if (choose == "5")
+		{
+			ChangeStorage();
+		}
+		else if (choose == "6")
+		{
+			ChangeUsers();
+		}
+		else if (choose == "7")
+		{
+			ShowIncome;
+		}
+		else if (choose == "0")
+		{
+			if (Logout())
+			{
+				break;
+			}
+		}
+		else
+		{
+			if (storageSize < 1)
+			{
+				std::cout << "Склад пустой\n";
+			}
+			Err();
+		}
+
+	}
+}
+void ShowUserMenu()
+{
+	std::string choose;
+	while (true)
+	{
+		std::cout << "1 - Начать продажу\n";
+		std::cout << "2 - Показать склад\n";
+		std::cout << "3 - Отчет о прибыли\n";
+		std::cout << "0 - Закрыть смену\n";
+		std::cout << "Ввод: ";
+		Getline(choose);
+
+		if (choose == "1" && storageSize > 0)
+		{
+			Selling();
+		}
+		else if (choose == "2" && storageSize > 0)
+		{
+			ShowStorage();
+		}
+		
+		else if (choose == "3")
 		{
 			ShowIncome;
 		}
