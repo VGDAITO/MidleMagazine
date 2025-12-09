@@ -515,6 +515,7 @@ void Start()
 				}
 				system("cls");
 				ShowAdminMenu();
+				
 			}
 			else if (currentStatus == userStatus[2])
 			{
@@ -524,6 +525,7 @@ void Start()
 				}
 				system("cls");
 				ShowUserMenu();
+				
 			}
 		}
 		else
