@@ -38,6 +38,7 @@ double* priceArr = nullptr;
 bool isStorageCreated = false;
 
 void CreateStorage();
+void ZeroCreateStorage();
 void ShowStorage(int mode = 0);
 void AddStorageItem();
 void RemoveStorageItem();
@@ -487,7 +488,7 @@ void Start()
 				{
 					if (isStorageCreated == false)
 					{
-						
+						ZeroCreateStorage();
 					}
 					system("cls");
 					ShowSuperAdminMenu();
@@ -1270,6 +1271,41 @@ void CreateStorage()
 	FillArray(nameArr, name, storageSize);
 	FillArray(countArr, count, storageSize);
 	FillArray(priceArr, price, storageSize);
+}
+
+void ZeroCreateStorage()
+{
+	std::string choose;
+
+	if (isStorageCreated)
+	{
+		delete[] idArr;
+		delete[] nameArr;
+		delete[] countArr;
+		delete[] priceArr;
+		isStorageCreated = false;
+	}
+
+	idArr = new unsigned int[storageSize];
+	nameArr = new std::string[storageSize];
+	countArr = new unsigned int[storageSize];
+	priceArr = new double[storageSize];
+
+	for (int i = 0; i < storageSize; i++)
+	{
+		idArr[i] = 0;
+		nameArr[i] = "";
+		countArr[i] = 0;
+		priceArr[i] = 0.0;
+	}
+
+	while (true)
+	{
+		AddNewItem();
+		break;
+	}
+
+	isStorageCreated = true;
 }
 
 void ShowStorage(int mode)
