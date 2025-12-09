@@ -498,6 +498,7 @@ void Start()
 						}
 						system("cls");
 						ShowSuperAdminMenu();
+						break;
 					}
 					else
 					{
@@ -747,6 +748,8 @@ void ShowSuperAdminMenu()
 		else if (choose == "2" && storageSize > 0)
 		{
 			ShowStorage();
+			Sleep(2000);
+			system("cls");
 		}
 		else if (choose == "3" && storageSize > 0)
 		{
@@ -1403,6 +1406,7 @@ void CreateStorage()
 	nameArr = new std::string[storageSize];
 	countArr = new unsigned int[storageSize];
 	priceArr = new double[storageSize];
+
 	isStorageCreated = true;
 
 	FillArray(idArr, id, storageSize);
@@ -1451,7 +1455,7 @@ void ShowStorage(int mode)
 	if (mode == 0)
 	{
 		system("cls");
-		std::cout << "ID\t" << std::left << std::setw(25) << "Название товара\t\t" << "Кол-во\t" << "Цена\n";
+		std::cout << "ID\t" << std::left << std::setw(25) << "Название товара\t\t\t" << "Кол-во\t" << "Цена\n";
 
 		for (size_t i = 0; i < storageSize; i++)
 		{
